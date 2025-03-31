@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg mx-auto" style="width: 24rem;">
+        <div class="d-flex  align-items-center">
+            <img src="{% static 'assets/logo.png' %}" width="80px" height="80px">
+            <h2 class="fw-semibold">Iniciar sesion</h2>
+        </div>
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="py-3 ">
+                <input type="text" class="form-control" name="username" , placeholder="Usuario" , required>
+            </div>
+
+            <div class="pb-3">
+                <input type="password" class="form-control" , name="password" , placeholder="Contraseña" , required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ingresar</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
