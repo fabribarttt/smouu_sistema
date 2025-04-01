@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<a href="{% url 'read_client' %}" class="btn btn-warning ms-5">Atras</a>
 <div class="card p-4 shadow-lg mx-auto" style="max-width: 500px;">
-    <h2 class="fs-2 pb-3">Registrar un cliente</h2>
+    <h2 class="fs-2 pb-3">Actualizar datos del cliente</h2>
 
-    <form method="POST" action="{% url 'register_client' %}">
+    <form method="POST">
         {% csrf_token %}
 
         {% for field in form %}
@@ -16,13 +16,11 @@
         {% endfor %}
 
         <br />
-        <button type="submit" class="btn btn-primary">Agregar cliente</button>
+        <button type="submit" class="btn btn-primary">Actualizar Datos</button>
 
     </form>
 
 
 </div>
-
-
 
 {% endblock %}

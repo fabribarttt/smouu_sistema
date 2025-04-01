@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="d-flex justify-content-between align-items-center m-3">
+    <h1>Clientes registrados</h1>
+    <a href="{% url 'create_client' %}" class="btn btn-primary">Registrar un cliente</a>
+</div>
+
+
+<table class="table table-striped table-hover table-bordered table-sm">
+    <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">RUC</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Ciudad</th>
+            <th scope="col">Correo</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% if clientes %}
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.id }}</td>
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.apellido }}</td>
+            <td>{{ cliente.cedula }}</td>
+            <td>{{ cliente.ruc }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>{{ cliente.ciudad }}</td>
+            <td>{{ cliente.correo }}</td>
+            <td><a href="{% url 'update_client' cliente.id %}" class="btn btn-sm btn-warning py-0">Editar</a>
+                <button class="btn btn-sm btn-danger py-0" data-bs-toggle="modal"
+                    data-bs-target="#delete_client_{{ cliente.id }}">Eliminar</button>
+            </td>
+        </tr>
+        {% include 'clients/delete_client.html'%}
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+
+
+{% endif %}
+
+{% endblock %}
