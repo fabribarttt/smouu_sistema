@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente
+from .models import Cliente, Dispositivo
 
 
 class RegisterClientForm(forms.ModelForm):
@@ -25,4 +25,20 @@ class RegisterClientForm(forms.ModelForm):
             "direccion": forms.TextInput(attrs={"class": "form-control"}),
             "ciudad": forms.Select(attrs={"class": "form-select"}),
             "correo": forms.EmailInput(attrs={"class": "form-control"}),
+        }
+
+
+class CreateDispositivoForm(forms.ModelForm):
+    class Meta:
+        model = Dispositivo
+        fields = "__all__"
+        labels = {
+            "marca": "Marca",
+            "modelo": "Modelo",
+            "categoria": "Categoria",
+        }
+        widgets = {
+            "marca": forms.TextInput(attrs={"class": "form-control"}),
+            "modelo": forms.TextInput(attrs={"class": "form-control"}),
+            "categoria": forms.Select(attrs={"class": "form-control"}),
         }

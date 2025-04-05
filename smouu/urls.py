@@ -12,4 +12,8 @@ urlpatterns = [
     path("update_client/<int:pk>", views.update_client_view, name="update_client"),
     path("delete_client/<int:pk>", views.delete_client_view, name="delete_client"),
     # CRUD Dispositivos
+    path("create_device/", views.create_device_view, name="create_device"),
+    path("read_device/", views.read_device_view, name="read_device"),
+    path("update_device/<int:pk>", views.update_device_view, name="update_device"),
+    path("delete_device/<int:pk>", views.delete_device_view, name="delete_device"),
 ]

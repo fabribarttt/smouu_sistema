@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'read_device' %}" class="btn btn-warning ms-5">Atras</a>
+<div class="card p-4 shadow-lg mx-auto" style="max-width: 500px;">
+    <h2 class="fs-2 pb-3">Actualizar datos del dispositivo</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="mb-3 d-flex align-items-center">
+            <label for="{{ field.id_for_label }}" class="me-2">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+
+        <br />
+        <button type="submit" class="btn btn-primary">Actualizar Datos</button>
+
+    </form>
+
+
+</div>
+
+{% endblock %}

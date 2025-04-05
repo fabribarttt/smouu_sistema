@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="d-flex justify-content-between align-items-center m-3">
+    <h1>Dispositivos registrados</h1>
+    <a class="btn btn-primary" href="{% url 'create_device' %}">Registrar un nuevo dispositivo</a>
+</div>
+
+
+<table class=" table table-striped table-hover table-bordered table-sm">
+    <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Categoria</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% if dispositivos %}
+        {% for dispositivo in dispositivos %}
+        <tr>
+            <td>{{ dispositivo.id }}</td>
+            <td>{{ dispositivo.marca }}</td>
+            <td>{{ dispositivo.modelo }}</td>
+            <td>{{ dispositivo.categoria }}</td>
+            <td class="col-2"><a href="{% url 'update_device' dispositivo.id %}"
+                    class="btn btn-sm btn-warning py-0 ">Editar</a>
+                <button class="btn btn-sm btn-danger py-0 " data-bs-toggle="modal"
+                    data-bs-target="#delete_device_{{ dispositivo.id }}">Eliminar</button>
+            </td>
+        </tr>
+        {% include 'devices/delete_device.html' %}
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+
+{% endif %}
+
+{% endblock %}
