@@ -2,7 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegisterClientForm, CreateDispositivoForm
+from django.db.models import Q
+from .forms import (
+    RegisterClientForm,
+    CreateDispositivoForm,
+    SearchClientForm,
+    SearchDeviceForm,
+    RepairTicketForm,
+)
 from .models import Cliente, Dispositivo
 
 
@@ -31,8 +38,79 @@ def logout_view(request):
     return redirect("login")
 
 
+# GENERAR ORDEN DE REPARACION
+@login_required
 def home_view(request):
-    return render(request, "home.html")
+    form = SearchClientForm()
+    return render(request, "repairs/client_search.html", {"form": form})
+
+
+@login_required
+def search_client_view(request):
+    search_term = request.GET.get("search_term", "")
+
+    if search_term:
+        clients = Cliente.objects.filter(Q(cedula__icontains=search_term))
+    else:
+        clients = Cliente.objects.none()
+
+    return render(request, "repairs/client_list_partial.html", {"clients": clients})
+
+
+@login_required
+def select_device_view(request, client_id):
+    client = Cliente.objects.get(id=client_id)
+    form = SearchDeviceForm()
+
+    return render(
+        request,
+        "repairs/device_selection.html",
+        {"client": client, "client_id": client_id, "form": form},
+    )
+
+
+@login_required
+def search_devices(request, client_id):
+    search_term = request.GET.get("search_term", "")
+
+    if search_term:
+        devices = Dispositivo.objects.filter(
+            Q(marca__icontains=search_term) | Q(modelo__icontains=search_term)
+        )
+    else:
+        devices = Dispositivo.objects.none()
+
+    return render(
+        request,
+        "repairs/device_list_partial.html",
+        {"devices": devices, "client_id": client_id},
+    )
+
+
+@login_required
+def create_repair_view(request, client_id, device_id):
+    client = Cliente.objects.get(id=client_id)
+    device = Dispositivo.objects.get(id=device_id)
+
+    if request.method == "POST":
+        form = RepairTicketForm(request.POST)
+        if form.is_valid():
+            repair = form.save(commit=False)
+            repair.id_cliente = client
+            repair.id_dispositivo = device
+            repair.save()
+    else:
+        form = RepairTicketForm()
+
+    return render(
+        request,
+        "repairs/repair_form.html",
+        {
+            "form": form,
+            "client": client,
+            "device": device,
+        },
+    )
 
 
 # CRUD CLIENTES

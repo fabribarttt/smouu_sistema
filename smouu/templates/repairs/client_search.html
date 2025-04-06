@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center d-fluid bg-white py-1 mb-4 fw-semibold fs-2">
+    Generar nueva
+    orden
+    de
+    reparacion
+</div>
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Buscar Cliente</h4>
+            </div>
+            <div class="card-body">
+                <form hx-get="{% url 'search_clients' %}" hx-target="#clients-results"
+                    hx-trigger="submit, input[name='search_term'] keyup delay:500ms">
+                    <div class="mb-3">
+                        {{ form.search_term }}
+                    </div>
+                </form>
+
+                <div id="clients-results" class="mt-4">
+                    <!-- Los resultados de la búsqueda se cargarán aquí -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

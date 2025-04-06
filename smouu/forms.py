@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Dispositivo
+from .models import Cliente, Dispositivo, OrdenReparacion
 
 
 class RegisterClientForm(forms.ModelForm):
@@ -41,4 +41,46 @@ class CreateDispositivoForm(forms.ModelForm):
             "marca": forms.TextInput(attrs={"class": "form-control"}),
             "modelo": forms.TextInput(attrs={"class": "form-control"}),
             "categoria": forms.Select(attrs={"class": "form-control"}),
+        }
+
+
+class SearchClientForm(forms.Form):
+    search_term = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Buscar cliente por numero de cedula",
+            }
+        ),
+    )
+
+
+class SearchDeviceForm(forms.Form):
+    search_term = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Buscar dispotivo por marca y modelo",
+            }
+        ),
+    )
+
+
+class RepairTicketForm(forms.ModelForm):
+    class Meta:
+        model = OrdenReparacion
+        fields = ["problema_reportado", "estado"]
+        widgets = {
+            "problema_reportado": forms.Textarea(
+                attrs={"class": "form-control", "rows": 3}
+            ),
+            "estado": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
         }

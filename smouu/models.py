@@ -61,6 +61,24 @@ class Dispositivo(models.Model):
         ("speaker", "Speaker"),
     ]
 
-    categoria = models.CharField(max_length=50, choices=TIPOS_DISPOSITIVO)
+    categoria = models.CharField(
+        max_length=50, choices=TIPOS_DISPOSITIVO, default="smartphone"
+    )
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
+
+
+class OrdenReparacion(models.Model):
+    STATUS_CHOICES = (
+        ("pending", "Pendiente"),
+        ("in_progress", "En Progreso"),
+        ("completed", "Completado"),
+        ("delivered", "Entregado"),
+    )
+
+    id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    id_dispositivo = models.ForeignKey(Dispositivo, on_delete=models.DO_NOTHING)
+    problema_reportado = models.TextField()
+    estado = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_finalizacion = models.DateTimeField(auto_now=True)

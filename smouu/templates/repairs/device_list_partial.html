@@ -1,0 +1,18 @@
+{% if devices %}
+<div class="list-group">
+    {% for device in devices %}
+    <a href="{% url 'create_repair' client_id=client_id device_id=device.id %}"
+        class="list-group-item list-group-item-action">
+
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ device.marca }} - {{ device.modelo }}</h5>
+
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% elif request.GET.search_term %}
+<div class="alert alert-warning">
+    No se encontraron dispositivos con ese criterio de búsqueda.
+</div>
+{% endif %}

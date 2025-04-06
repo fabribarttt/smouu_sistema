@@ -1,0 +1,19 @@
+{% if clients %}
+<div class="list-group">
+    {% for client in clients %}
+    <a href="{% url 'select_device' client.id %}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100">
+            <h5 class="mb-1 pe-1">{{ client.nombre }}</h5>
+            <h5 class="mb-1">{{ client.apellido }}</h5>
+        </div>
+        <p class="mb-1">CI: {{ client.cedula }}</p>
+        <p class="mb-1">Correo: {{ client.correo }}</p>
+        <small>Teléfono: {{ client.telefono }}</small>
+    </a>
+    {% endfor %}
+</div>
+{% elif request.GET.search_term %}
+<div class="alert alert-warning">
+    No se encontraron clientes.
+</div>
+{% endif %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Seleccionar Dispositivo</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title mb-3">Cliente: {{ client.nombre }} {{ client.apellido }}</h5>
+                <p>CI: {{ client.cedula }}</p>
+                <p>RUC: {{ client.ruc }}</p>
+                <p>Email: {{ client.correo }}</p>
+                <p>Teléfono: {{ client.telefono }}</p>
+
+                <hr>
+
+                <form hx-get="{% url 'search_devices' client.id %}" hx-target="#devices-results"
+                    hx-trigger="submit, input[name='search_term'] keyup delay:500ms">
+                    <div class="mb-3">
+                        {{ form.search_term }}
+                    </div>
+                </form>
+
+                <div id="devices-results" class="mt-4">
+                    <!-- Los resultados de la búsqueda se cargarán aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
