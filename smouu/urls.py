@@ -29,4 +29,5 @@ urlpatterns = [
         views.create_repair_view,
         name="create_repair",
     ),
+    path("repair_list/", views.read_repair_list_view, name="repair_list"),
 ]

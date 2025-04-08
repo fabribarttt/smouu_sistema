@@ -10,7 +10,7 @@ from .forms import (
     SearchDeviceForm,
     RepairTicketForm,
 )
-from .models import Cliente, Dispositivo
+from .models import Cliente, Dispositivo, OrdenReparacion
 
 
 def login_view(request):
@@ -99,6 +99,7 @@ def create_repair_view(request, client_id, device_id):
             repair.id_cliente = client
             repair.id_dispositivo = device
             repair.save()
+            return redirect("repair_list")
     else:
         form = RepairTicketForm()
 
@@ -111,6 +112,14 @@ def create_repair_view(request, client_id, device_id):
             "device": device,
         },
     )
+
+
+@login_required
+def read_repair_list_view(request):
+    reparaciones = OrdenReparacion.objects.select_related(
+        "id_cliente", "id_dispositivo"
+    ).all()
+    return render(request, "repairs/repair_list.html", {"reparaciones": reparaciones})
 
 
 # CRUD CLIENTES
