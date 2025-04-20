@@ -26,10 +26,11 @@ python3 -m venv .venv
   .\.venv\Scripts\Activate.ps1
   ```
 
-- Una vez activado, instalá las dependencias del proyecto con:
-  ```bash
-  pip install -r requirements.txt
-  ```
+### Una vez activado, instalá las dependencias del proyecto con:
+
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
