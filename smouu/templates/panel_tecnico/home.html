@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Reparaciones asignadas</h1>
+
+<table class=" table table-striped table-hover table-bordered table-sm">
+    <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Tecnico</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Problema</th>
+            <th scope="col">Observaciones</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% for asignacion in asignaciones %}
+        <tr>
+            <td>{{ asignacion.id_orden.id }}</td>
+            <td>{{ asignacion.id_empleado.nombre }}</td>
+            <td>{{ asignacion.id_orden.id_dispositivo.marca }}</td>
+            <td>{{ asignacion.id_orden.id_dispositivo.modelo }}</td>
+            <td>{{ asignacion.id_orden.problema_reportado }}</td>
+            <td>{{ asignacion.id_orden.observaciones }}</td>
+            <td>{{ asignacion.estado_reparacion }}</td>
+            <td>
+                <button type="submit" class="btn btn-warning btn-sm">Actualiza estado</button>
+
+            </td>
+            <td>
+                <button type="submit" class="btn btn-success btn-sm">Notas</button>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

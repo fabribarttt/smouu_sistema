@@ -9,8 +9,16 @@ from .forms import (
     SearchClientForm,
     SearchDeviceForm,
     RepairTicketForm,
+    RegistrarRepuesto,
 )
-from .models import Cliente, Dispositivo, OrdenReparacion
+from .models import (
+    Cliente,
+    Dispositivo,
+    OrdenReparacion,
+    InventarioRepuesto,
+    Empleado,
+    AsignacionReparacion,
+)
 
 
 def login_view(request):
@@ -22,7 +30,16 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Bienvenido")
-            return redirect("home")
+            # De acuerdo al rol del usuario sera redirigido a su respectivo panel
+            if user.groups.filter(name="atencion al cliente").exists():
+                return redirect("home")
+            elif user.groups.filter(name="supervisor").exists():
+                return redirect("panel_supervisor")
+            elif user.groups.filter(name="tecnico").exists():
+                return redirect("panel_tecnico")
+            else:
+                return redirect("login")
+            # ----------------------------------------------------------------------
         else:
             messages.warning(request, "Usuario o contraseña incorrecto")
             return redirect("login")
@@ -38,6 +55,7 @@ def logout_view(request):
     return redirect("login")
 
 
+# -------------------------------- PANEL ATENCION AL CLIENTE --------------------------------------
 # GENERAR ORDEN DE REPARACION
 @login_required
 def home_view(request):
@@ -91,6 +109,7 @@ def search_devices(request, client_id):
 def create_repair_view(request, client_id, device_id):
     client = Cliente.objects.get(id=client_id)
     device = Dispositivo.objects.get(id=device_id)
+    empleado = Empleado.objects.get(usuario=request.user)
 
     if request.method == "POST":
         form = RepairTicketForm(request.POST)
@@ -98,6 +117,7 @@ def create_repair_view(request, client_id, device_id):
             repair = form.save(commit=False)
             repair.id_cliente = client
             repair.id_dispositivo = device
+            repair.id_empleado = empleado
             repair.save()
             return redirect("repair_list")
     else:
@@ -118,7 +138,7 @@ def create_repair_view(request, client_id, device_id):
 def read_repair_list_view(request):
     reparaciones = OrdenReparacion.objects.select_related(
         "id_cliente", "id_dispositivo"
-    ).all()
+    ).prefetch_related("asignacionreparacion_set")
     return render(request, "repairs/repair_list.html", {"reparaciones": reparaciones})
 
 
@@ -211,3 +231,77 @@ def delete_device_view(request, pk):
     delete_it.delete()
     messages.success(request, "El dispositivo se ha eliminado")
     return redirect("read_device")
+
+
+# --------------------------------- PANEL SUPERVISOR -----------------------------------------
+
+
+@login_required
+# Vista de las ordenes de reparacion para asignar a un tecnico
+def panel_supervisor_view(request):
+    ordenes = OrdenReparacion.objects.filter(asignacionreparacion__isnull=True)
+    tecnicos = Empleado.objects.filter(rol__name="tecnico")
+
+    if request.method == "POST":
+        orden_id = request.POST.get("orden_id")
+        tecnico_id = request.POST.get("tecnico_id")
+
+        if orden_id and tecnico_id:
+            orden = OrdenReparacion.objects.get(id=orden_id)
+            tecnico = Empleado.objects.get(id=tecnico_id)
+
+            AsignacionReparacion.objects.create(
+                id_orden=orden,
+                id_empleado=tecnico,
+                estado_reparacion="pendiente",  # o el estado inicial que quieras
+            )
+
+            messages.success(request, "Técnico asignado correctamente")
+        else:
+            messages.warning(request, "Porfavor seleccione un tecnico")
+
+    return render(
+        request,
+        "panel_supervisor/asignacion_reparacion/lista_ordenes_reparacion.html",
+        {
+            "ordenes": ordenes,
+            "tecnicos": tecnicos,
+        },
+    )
+
+
+# CRUD Inventario
+def inventario_view(request):
+    inventario = InventarioRepuesto.objects.select_related(
+        "id_categoria", "id_proveedor"
+    ).all()
+    return render(
+        request, "panel_supervisor/inventario.html", {"inventario": inventario}
+    )
+
+
+def create_inventario_view(request):
+    form = RegistrarRepuesto(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se ha registrado el repuesto")
+            return redirect("inventario")
+    else:
+        return render(
+            request, "panel_supervisor/create_inventario.html", {"form": form}
+        )
+
+
+def reportes_views(request):
+    return render(request, "panel_supervisor/reportes.html")
+
+
+# --------------------------------- PANEL TECNICO ---------------------------------------------
+@login_required
+def panel_tecnico_view(request):
+    tecnico = request.user.empleado
+    asignaciones = AsignacionReparacion.objects.select_related(
+        "id_orden", "id_orden__id_dispositivo"
+    ).filter(id_empleado=tecnico)
+    return render(request, "panel_tecnico/home.html", {"asignaciones": asignaciones})

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center m-3">
+    <h1>Registrar repuesto</h1>
+    <a href="{% url 'create_inventario' %}" class="btn btn-primary">Registrar un repuesto</a>
+</div>
+
+<table class=" table table-striped table-hover table-bordered table-sm">
+    <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Proveedor</th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% if inventario %}
+        {% for inventario in inventario %}
+        <tr>
+            <td>{{ inventario.id }}</td>
+            <td>{{ inventario.nombre_repuesto }}</td>
+            <td>{{ inventario.id_categoria.nombre_categoria }}</td>
+            <td>{{ inventario.cantidad_disponible }}</td>
+            <td>{{ inventario.precio }}</td>
+            <td>{{ inventario.id_proveedor.nombre_local }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock %}

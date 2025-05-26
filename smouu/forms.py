@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Dispositivo, OrdenReparacion
+from .models import Cliente, Dispositivo, OrdenReparacion, InventarioRepuesto
 
 
 class RegisterClientForm(forms.ModelForm):
@@ -73,14 +73,30 @@ class SearchDeviceForm(forms.Form):
 class RepairTicketForm(forms.ModelForm):
     class Meta:
         model = OrdenReparacion
-        fields = ["problema_reportado", "estado"]
+        fields = ["problema_reportado", "observaciones"]
         widgets = {
             "problema_reportado": forms.Textarea(
                 attrs={"class": "form-control", "rows": 3}
             ),
-            "estado": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
-            ),
+            "observaciones": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+        }
+
+
+class RegistrarRepuesto(forms.ModelForm):
+    class Meta:
+        model = InventarioRepuesto
+        fields = "__all__"
+        label = {
+            "nombre_repuesto": "Nombre repuesto",
+            "id_categoria": "Categoria",
+            "cantidad_disponible": "Cantidad",
+            "precio": "Precio",
+            "id_proveedor": "Proveedor",
+        }
+        widgets = {
+            "nombre_repuesto": forms.TextInput(attrs={"class": "form-control"}),
+            "id_categoria": forms.Select(attrs={"class": "form-select"}),
+            "cantidad_disponible": forms.TextInput(attrs={"class": "form-control"}),
+            "precio": forms.TextInput(attrs={"class": "form-control"}),
+            "id_proveedor": forms.Select(attrs={"class": "form-select"}),
         }

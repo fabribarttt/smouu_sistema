@@ -22,8 +22,13 @@
                 <input type="password" class="form-control" , name="password" , placeholder="Contraseña" , required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Ingresar</button>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+                <a class="btn btn-warning" href="{% url 'admin:index' %}">Panel Administrador</a>
+            </div>
+
         </form>
+
     </div>
 </div>
 

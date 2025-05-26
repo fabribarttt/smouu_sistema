@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Asignacion de reparaciones</h1>
+
+<table class=" table table-striped table-hover table-bordered table-sm">
+    <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Problema</th>
+            <th scope="col">Observaciones</th>
+            <th scope="col">Asignar Tecnico</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% if ordenes %}
+        {% for orden in ordenes %}
+        <tr>
+            <td>{{ orden.id }}</td>
+            <td>{{ orden.id_dispositivo.marca }}</td>
+            <td>{{ orden.id_dispositivo.modelo }}</td>
+            <td>{{ orden.id_dispositivo.categoria }}</td>
+            <td>{{ orden.problema_reportado }}</td>
+            <td>{{ orden.observaciones }}</td>
+            <form method="post">
+                {% csrf_token %}
+                <td>
+
+                    <input type="hidden" name="orden_id" value="{{ orden.id }}">
+                    <select name="tecnico_id" class="form-select form-select-sm">
+                        <option value="">Seleccione un técnico</option>
+                        {% for tecnico in tecnicos %}
+                        <option value="{{ tecnico.id }}">{{ tecnico.nombre }} {{ tecnico.apellido }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Asignar</button>
+
+                </td>
+            </form>
+
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+
+{% endblock %}

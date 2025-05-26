@@ -1,7 +1,9 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
+    # ------------------------------ ATENCION AL CLIENTE ---------------------------------------------
     # Login, Panel principal, Logout
     path("", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
@@ -30,4 +32,13 @@ urlpatterns = [
         name="create_repair",
     ),
     path("repair_list/", views.read_repair_list_view, name="repair_list"),
+    # ---------------------------------- SUPERVISOR -----------------------------------------------------
+    path("panel_supervisor/", views.panel_supervisor_view, name="panel_supervisor"),
+    # CRUD Inventario
+    path("inventario/", views.inventario_view, name="inventario"),
+    path("create_inventario/", views.create_inventario_view, name="create_inventario"),
+    # CRUD Reportes
+    path("reportes/", views.reportes_views, name="reportes"),
+    # ---------------------------------- TECNICO --------------------------------------------------------
+    path("panel_tecnico/", views.panel_tecnico_view, name="panel_tecnico"),
 ]

@@ -17,7 +17,9 @@
             <th scope="col">Marca</th>
             <th scope="col">Modelo</th>
             <th scope="col">Problema</th>
+            <th scope="col">Observaciones</th>
             <th scope="col">Estado</th>
+            <th scope="col">Recepcionado</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -32,7 +34,17 @@
             <td>{{ reparacion.id_dispositivo.marca }}</td>
             <td>{{ reparacion.id_dispositivo.modelo }}</td>
             <td>{{ reparacion.problema_reportado }}</td>
-            <td>{{ reparacion.estado }}</td>
+            <td>{{ reparacion.observaciones }}</td>
+            <td>
+                {% if reparacion.asignacionreparacion_set.all %}
+                {% for asignacion in reparacion.asignacionreparacion_set.all %}
+                {{ asignacion.estado_reparacion }}
+                {% endfor %}
+                {% else %}
+                Sin asignación
+                {% endif %}
+            </td>
+            <td>{{ reparacion.id_empleado.nombre }}</td>
             <td class="col-1"><a href="" class="btn btn-sm btn-warning py-0 ">Editar</a>
             </td>
         </tr>

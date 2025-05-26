@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary py-0">
     <div class="container-fluid">
         <div>
-            <a class="navbar-brand fs-5" href="{% url 'home' %}">
+            <a class="navbar-brand fs-5">
                 <img src="{% static 'assets/logo.png' %}" alt="Logo" width="60" height="60"
                     class="d-inline-block align-text-center">
                 Smouu Planet
@@ -16,6 +16,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
+                    {# --------------------- Seccion navbar para atencion al cliente -----------------------------#}
+                    {% for group in user.groups.all %}
+                    {% if group.name == "atencion al cliente" %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Inicio</a>
                     </li>
@@ -35,6 +38,40 @@
                             <li><a class="dropdown-item" href="{% url 'read_device' %}">Dispositivo</a></li>
                         </ul>
                     </li>
+
+                    {% endif %}
+                    {% endfor %}
+                    {# ------------------------------------------------------------------------------------------ #}
+
+
+                    {# ------------------------- Seccion navbar supervisor -------------------------------------- #}
+                    {% for group in user.groups.all %}
+                    {% if group.name == "supervisor" %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="{% url 'panel_supervisor' %}">Reparaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'inventario' %}">Inventario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'reportes' %}">Reportes</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {# ------------------------------------------------------------------------------------------ #}
+
+
+                    {# --------------------------- Seccion navbar tecnico --------------------------------------- #}
+                    {% for group in user.groups.all %}
+                    {% if group.name == "tecnico" %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'panel_tecnico' %}">Inicio</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {# ------------------------------------------------------------------------------------------ #}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesion</a>
                     </li>
