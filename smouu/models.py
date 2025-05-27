@@ -56,6 +56,26 @@ class Dispositivo(models.Model):
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f"{self.marca} {self.modelo}"
+
+
+class Servicio(models.Model):
+    TIPO_SERVICIO = [
+        ("pantalla", "Cambio de Pantalla"),
+        ("bateria", "Cambio de Batería"),
+        ("diagnostico", "Diagnostico"),
+    ]
+
+    tipo = models.CharField(max_length=20, choices=TIPO_SERVICIO, default="diagnostico")
+    dispositivo = models.ForeignKey(
+        "Dispositivo", on_delete=models.CASCADE, related_name="servicios"
+    )
+    precio = models.IntegerField()
+
+    def __str__(self):
+        return self.get_tipo_display()
+
 
 class OrdenReparacion(models.Model):
     id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -63,6 +83,9 @@ class OrdenReparacion(models.Model):
         Empleado, on_delete=models.CASCADE, null=True, blank=True
     )
     id_dispositivo = models.ForeignKey(Dispositivo, on_delete=models.DO_NOTHING)
+    servicio = models.ForeignKey(
+        Servicio, on_delete=models.CASCADE, null=True, blank=True
+    )
     problema_reportado = models.TextField()
     observaciones = models.TextField(null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)

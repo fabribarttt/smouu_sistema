@@ -18,6 +18,7 @@ from .models import (
     InventarioRepuesto,
     Empleado,
     AsignacionReparacion,
+    Servicio,
 )
 
 
@@ -113,6 +114,7 @@ def create_repair_view(request, client_id, device_id):
 
     if request.method == "POST":
         form = RepairTicketForm(request.POST)
+        form.fields["servicio"].queryset = Servicio.objects.filter(dispositivo=device)
         if form.is_valid():
             repair = form.save(commit=False)
             repair.id_cliente = client
@@ -122,6 +124,7 @@ def create_repair_view(request, client_id, device_id):
             return redirect("repair_list")
     else:
         form = RepairTicketForm()
+        form.fields["servicio"].queryset = Servicio.objects.filter(dispositivo=device)
 
     return render(
         request,

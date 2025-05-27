@@ -73,8 +73,9 @@ class SearchDeviceForm(forms.Form):
 class RepairTicketForm(forms.ModelForm):
     class Meta:
         model = OrdenReparacion
-        fields = ["problema_reportado", "observaciones"]
+        fields = ["servicio", "problema_reportado", "observaciones"]
         widgets = {
+            "servicio": forms.Select(attrs={"class": "form-select"}),
             "problema_reportado": forms.Textarea(
                 attrs={"class": "form-control", "rows": 3}
             ),

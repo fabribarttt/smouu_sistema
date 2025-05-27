@@ -8,6 +8,7 @@ from .models import (
     Proveedore,
     InventarioRepuesto,
     MovimientoRepuesto,
+    Servicio,
 )
 
 admin.site.site_header = "Smouu Planet"
@@ -66,3 +67,8 @@ class InventarioRepuestoAdmin(admin.ModelAdmin):
 @admin.register(MovimientoRepuesto)
 class MovimientoRepuestoAdmin(admin.ModelAdmin):
     list_display = ("id_repuesto", "tipo_movimiento", "cantidad")
+
+
+@admin.register(Servicio)
+class ServicioAdmin(admin.ModelAdmin):
+    list_display = ("tipo", "dispositivo", "precio")
