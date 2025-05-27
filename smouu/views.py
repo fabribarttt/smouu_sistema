@@ -31,7 +31,7 @@ def login_view(request):
             login(request, user)
             messages.success(request, "Bienvenido")
             # De acuerdo al rol del usuario sera redirigido a su respectivo panel
-            if user.groups.filter(name="atencion al cliente").exists():
+            if user.groups.filter(name="recepcionista").exists():
                 return redirect("home")
             elif user.groups.filter(name="supervisor").exists():
                 return redirect("panel_supervisor")

@@ -16,9 +16,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    {# --------------------- Seccion navbar para atencion al cliente -----------------------------#}
+                    {# --------------------- Seccion navbar para recepcionista -----------------------------#}
                     {% for group in user.groups.all %}
-                    {% if group.name == "atencion al cliente" %}
+                    {% if group.name == "recepcionista" %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Inicio</a>
                     </li>
